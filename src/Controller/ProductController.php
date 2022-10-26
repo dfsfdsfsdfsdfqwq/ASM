@@ -2,27 +2,78 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
+use App\Entity\OrderDetail;
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\BrandRepository;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Brand;
+
 
 /**
  * @Route("/product")
  */
 class ProductController extends AbstractController
 {
+
     /**
-     * @Route("/", name="app_product_index", methods={"GET"})
+     * @Route("/{pageId}", name="app_product_index", methods={"GET"})
+     * @param ProductRepository $productRepository
+     * @param Request $request
+     * @param $orderBy
+     * @param int $pageId
+     * @return Response
      */
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, BrandRepository $brandRepository, Request $request, int $pageId = 1): Response
     {
-        return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+        $brand = $request->query->get('brand');
+        $minPrice = $request->query->get('minPrice');
+        $maxPrice = $request->query->get('maxPrice');
+        $Name = $request->query->get('name');
+        $sortBy = $request->query->get('sort');
+        $orderBy = $request->query->get('order');
+
+        $expressionBuilder = Criteria::expr();
+        $criteria = new Criteria();
+        if (!is_null($minPrice) || empty($minPrice)) {
+            $minPrice = 0;
+        }
+        $criteria->where($expressionBuilder->gte('price', $minPrice));
+        if (!is_null($maxPrice) && !empty(($maxPrice))) {
+            $criteria->andWhere($expressionBuilder->lte('price', $maxPrice));
+        }
+        if (!is_null($Name) && !empty(($Name))) {
+            $criteria->andWhere($expressionBuilder->contains('name', $Name));
+            $criteria->orWhere($expressionBuilder->contains('description', $Name));
+
+        }
+        if (($brand!='None') && (!is_null($Name)) ) {
+            $criteria->andWhere($expressionBuilder->eq('brand', $brand));
+        }
+        if(!empty($sortBy)){
+            $criteria->orderBy([$sortBy => ($orderBy == 'asc') ? Criteria::ASC : Criteria::DESC]);
+        }
+
+        $filteredList = $productRepository->matching($criteria);
+
+        $numOfItems = $filteredList->count();   // total number of items satisfied above query
+        $itemsPerPage = 8; // number of items shown each page
+        $filteredList = $filteredList->slice($itemsPerPage * ($pageId - 1), $itemsPerPage);
+        return $this->renderForm('product/index.html.twig', [
+            'products' => $filteredList,
+            'brands' => $brandRepository->findAll(),
+            'numOfPages' => ceil($numOfItems / $itemsPerPage)
+
         ]);
+
     }
 
     /**
