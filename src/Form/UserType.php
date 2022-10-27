@@ -15,8 +15,8 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('roles')
-            ->add('password')
+            ->add('firstname')
+            ->add('lastname')
             ->add('DoB', DateType::class, [
                 'required' => True,
                 'widget' => 'single_text',

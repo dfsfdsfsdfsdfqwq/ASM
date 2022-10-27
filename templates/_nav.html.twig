@@ -9,7 +9,14 @@
         <div>
             <ul class="nav nav-pills nav-fill">
 
-
+                {% if app.request.get('_route') == 'home' %}
+                <li class="nav-item"><a href="{{ path('home') }}" class="nav-link active"
+                                        style="color: white;"><i class="fa fa-home"></i> Home</a></li>
+                {% else %}
+                <li class="nav-item"><a href="{{ path('home') }}" class="nav-link" style="color: white;"><i
+                                class="fa fa-home"></i> Home</a>
+                </li>
+                {% endif %}
                 {% if app.request.get('_route') == 'app_product_index' %}
                     <li class="nav-item"><a style="color: white;" href="{{ path('app_product_index') }}"
                                             class="nav-link active"><i class="fa fa-laptop"></i> Products</a></li>
@@ -52,30 +59,23 @@
                     {% endif %}
                 {% endif %}
             </ul>
+            <br>
             {% if is_granted('ROLE_ADMIN') %}
 
                 <ul class="nav nav-pills">
                     <li class="nav-item"><p class="nav-link" style="color: black;background-color: white"><i
                                     class="fas fa-user-tie"></i> Manage </p>
                     </li>
-{#                    <li class="nav-item">#}
-{#                        {% if app.request.get('_route') == 'app_user_index' %}#}
-{#                    <li class="nav-item"><a href="{{ path('app_user_index') }}" class="nav-link active"#}
-{#                                            style="color: white;"><i class="fa fa-user"></i> User</a></li>#}
-{#                    {% else %}#}
-{#                        <li class="nav-item"><a href="{{ path('app_user_index') }}" class="nav-link"#}
-{#                                                style="color: white;"><i class="fa fa-user"></i> User</a></li>#}
-{#                    {% endif %}#}
-{#                    </li>#}
-{#                    <li class="nav-item">#}
-{#                        {% if app.request.get('_route') == 'app_product_manage' %}#}
-{#                    <li class="nav-item"><a href="{{ path('app_product_manage') }}" class="nav-link active"#}
-{#                                            style="color: white;"><i class="fa fa-laptop"></i> Product</a></li>#}
-{#                {% else %}#}
-{#                    <li class="nav-item"><a href="{{ path('app_product_manage') }}" class="nav-link"#}
-{#                                            style="color: white;"><i class="fa fa-laptop"></i> Product</a></li>#}
-{#                    {% endif %}#}
-{#                    </li>#}
+                    <li class="nav-item">
+                        {% if app.request.get('_route') == 'app_user_index' %}
+                    <li class="nav-item"><a href="{{ path('app_user_index') }}" class="nav-link active"
+                                            style="color: white;"><i class="fa fa-user"></i> User</a></li>
+                    {% else %}
+                        <li class="nav-item"><a href="{{ path('app_user_index') }}" class="nav-link"
+                                                style="color: white;"><i class="fa fa-user"></i> User</a></li>
+                    {% endif %}
+                    </li>
+
                     <li class="nav-item">
                         {% if app.request.get('_route') == 'app_brand_index' %}
                     <li class="nav-item"><a href="{{ path('app_brand_index') }}" class="nav-link active"
