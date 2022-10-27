@@ -19,15 +19,15 @@
 
                 {% endif %}
                 {% if app.user %}
-{#                    <li class="nav-item">#}
-{#                        {% if app.request.get('_route') == 'app_user_show' %}#}
-{#                            <a class="nav-link active" href=" {{ path('app_user_show', {'id':  app.user.id  }) }}"#}
-{#                               style="color: white;"><i class="fa fa-user"></i> Wellcome {{ app.user.lastname }}</a>#}
-{#                        {% else %}#}
-{#                            <a class="nav-link" href=" {{ path('app_user_show', {'id':  app.user.id  }) }}"#}
-{#                               style="color: white;"> <i class="fa fa-user"></i> Wellcome {{ app.user.lastname }}</a>#}
-{#                        {% endif %}#}
-{#                    </li>#}
+                    <li class="nav-item">
+                        {% if app.request.get('_route') == 'app_user_show' %}
+                            <a class="nav-link active" href=" {{ path('app_user_show', {'id':  app.user.id  }) }}"
+                               style="color: white;"><i class="fa fa-user"></i> Wellcome {{ app.user.lastname }}</a>
+                        {% else %}
+                            <a class="nav-link" href=" {{ path('app_user_show', {'id':  app.user.id  }) }}"
+                               style="color: white;"> <i class="fa fa-user"></i> Wellcome {{ app.user.lastname }}</a>
+                        {% endif %}
+                    </li>
                 {% endif %}
 
                 <li class="nav-item">
