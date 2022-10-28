@@ -39,12 +39,12 @@
 
                 <li class="nav-item">
                     {% if app.request.get('_route') == 'app_login' %}
-                        <a href="/{{ app.user ? 'logout' : 'login' }}" class="nav-link active" style="color: white;">
+                        <a href="/{{ app.user ? 'logout' : '' }}" class="nav-link active" style="color: white;">
                             {{ app.user ? 'Logout' : 'Login' }}
                         </a>
                     {% else %}
 
-                        <a href="/{{ app.user ? 'logout' : 'login' }}" class="nav-link " style="color: white;">
+                        <a href="/{{ app.user ? 'logout' : '' }}" class="nav-link " style="color: white;">
                             {{ app.user ? 'Logout' : 'Login' }}
                         </a>
                     {% endif %}
@@ -86,7 +86,14 @@
                     </li>
                     {% endif %}
                     </li>
-
+                    <li class="nav-item">
+                        {% if app.request.get('_route') == 'app_product_manage' %}
+                    <li class="nav-item"><a href="{{ path('app_product_manage') }}" class="nav-link active"
+                                            style="color: white;"><i class="fa fa-laptop"></i> Product</a></li>
+                    {% else %}
+                    <li class="nav-item"><a href="{{ path('app_product_manage') }}" class="nav-link"
+                                            style="color: white;"><i class="fa fa-laptop"></i> Product</a></li>
+                    {% endif %}
                 </ul>
             {% endif %}
         </div>
