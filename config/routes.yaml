@@ -1,3 +1,8 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+app_register:
+  path: /register
+  controller: App\Controller\RegistrationController::register
+  methods: ['GET', 'HEAD']
+app_login:
+  path: /login
+  controller: App\Controller\SecurityController::login
+  methods: ['GET', 'HEAD']
