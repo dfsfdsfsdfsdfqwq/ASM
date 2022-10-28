@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Edit User</h1>
+
+        {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <button class="btn btn-primary" style="margin-top: 10px; height: 40px; border-radius: 4px; ">
+            <a href="{{ path('app_user_index') }}"  style="color: white">Back to Profile</a>
+        </button>
+    </div>
+
+{% endblock %}
