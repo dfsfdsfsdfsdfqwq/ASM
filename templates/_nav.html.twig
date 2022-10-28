@@ -49,15 +49,15 @@
                         </a>
                     {% endif %}
                 </li>
-                {% if app.user is null %}
-                    {% if app.request.get('_route') == 'app_register' %}
-                        <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link active"
-                                                style="color: white;">Signup</a></li>
-                    {% else %}
-                        <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link"
-                                                style="color: white;">Signup</a></li>
-                    {% endif %}
-                {% endif %}
+{#                {% if app.user is null %}#}
+{#                    {% if app.request.get('_route') == 'app_register' %}#}
+{#                        <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link active"#}
+{#                                                style="color: white;">Signup</a></li>#}
+{#                    {% else %}#}
+{#                        <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link"#}
+{#                                                style="color: white;">Signup</a></li>#}
+{#                    {% endif %}#}
+{#                {% endif %}#}
             </ul>
             <br>
             {% if is_granted('ROLE_ADMIN') %}
