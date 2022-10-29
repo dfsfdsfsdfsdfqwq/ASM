@@ -6,7 +6,7 @@
     <h1>Product</h1>
 
     <table class="table">
-        <tbody>
+        <body>
             <tr>
                 <th>Id</th>
                 <td>{{ product.id }}</td>
@@ -29,9 +29,10 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td>{{ product.image }}</td>
+                <td><img width="20%" class="pro-container"   src="{{ asset(product.image) }}"></td>
+                >
             </tr>
-        </tbody>
+        </body>
     </table>
 
     <a href="{{ path('app_product_index') }}">back to list</a>
