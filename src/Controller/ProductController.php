@@ -24,6 +24,15 @@ use App\Entity\Brand;
  */
 class ProductController extends AbstractController
 {
+    /**
+     * @Route("/manage", name="app_product_manage", methods={"GET"})
+     */
+    public function manage(ProductRepository $productRepository): Response
+    {
+        return $this->render('product/manage.html.twig', [
+            'products' => $productRepository->findAll(),
+        ]);
+    }
 
     /**
      * @Route("/addCart/{id}", name="app_add_cart", methods={"GET"})
@@ -269,4 +278,6 @@ class ProductController extends AbstractController
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 }
