@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Brand index{% endblock %}
+{% block title %}Brand{% endblock %}
 
 {% block body %}
-    <h1>Brand index</h1>
-
+<div class="container">
+    <h1>Brand Management</h1>
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Origin</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Origin</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for brand in brands %}
@@ -21,8 +21,13 @@
                 <td>{{ brand.name }}</td>
                 <td>{{ brand.Origin }}</td>
                 <td>
-                    <a href="{{ path('app_brand_show', {'id': brand.id}) }}">show</a>
-                    <a href="{{ path('app_brand_edit', {'id': brand.id}) }}">edit</a>
+                    <button class="btn btn-primary" >
+                        <a href="{{ path('app_brand_show', {'id': brand.id}) }}" style="color: white">Show</a>
+                    </button>
+                    <button class="btn btn-primary" >
+                        <a href="{{ path('app_brand_edit', {'id': brand.id}) }}"style="color: white">Edit</a>
+                    </button>
+
                 </td>
             </tr>
         {% else %}
@@ -32,6 +37,8 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_brand_new') }}">Create new</a>
+    <button class="btn btn-primary" >
+        <a href="{{ path('app_brand_new') }} "style="color: white">Create new</a>
+    </button>
+</div>
 {% endblock %}

@@ -3,8 +3,9 @@
 {% block title %}Product{% endblock %}
 
 {% block body %}
-    <h1>Product</h1>
 
+<div class="container">
+    <h1>Product</h1>
     <table class="table">
         <body>
             <tr>
@@ -34,10 +35,9 @@
             </tr>
         </body>
     </table>
+    <div class="text-center" >
+    <button class="btn btn-primary"  onclick="document.location='http://localhost:8000/product'">Back to list</button>
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
-
-    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-
-    {{ include('product/_delete_form.html.twig') }}
+</div>
+</div>
 {% endblock %}
