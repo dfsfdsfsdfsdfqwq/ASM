@@ -3,16 +3,17 @@
 {% block title %}Brand{% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>Brand Management</h1>
+
+ <div class="container">
+     <h1>Brand Management</h1>
     <table class="table">
         <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Origin</th>
-            <th>actions</th>
-        </tr>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Origin</th>
+                <th>actions</th>
+            </tr>
         </thead>
         <tbody>
         {% for brand in brands %}
@@ -40,5 +41,5 @@
     <button class="btn btn-primary" >
         <a href="{{ path('app_brand_new') }} "style="color: white">Create new</a>
     </button>
-</div>
+ </div>
 {% endblock %}

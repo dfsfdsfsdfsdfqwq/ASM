@@ -19,7 +19,7 @@
             <th>actions</th>
         </tr>
         </thead>
-        <body>
+        <tbody>
         {% for product in products %}
             <tr>
                 <td>{{ product.id }}</td>
@@ -27,8 +27,9 @@
                 <td>{{ product.description }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.weight }}</td>
-                <td>  </td>
-                <td>{{ product.brand.name }}</td>
+                <td><img class="card-img-top"
+                         src="{{ asset(product.image) }}"  width="50px" height="50px" alt="Card image"></td>
+                <td>{{ product.brandname.name }}</td>
                 <td>
                     <button class="btn btn-primary" >
                         <a href="{{ path('app_product_show', {'id': product.id}) }}" style="color: white">Show</a>
@@ -44,7 +45,7 @@
                 <td colspan="4">no records found</td>
             </tr>
         {% endfor %}
-        </body>
+        </tbody>
     </table>
 
     <a href="{{ path('app_product_new') }}">Create new</a>
