@@ -38,7 +38,6 @@ class ProductRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
 //    /**
 //     * @return Product[] Returns an array of Product objects
 //     */

@@ -23,7 +23,7 @@ class Product
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
 
@@ -38,12 +38,17 @@ class Product
     private $weight;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Brand::class, inversedBy="products")
+     * @ORM\ManyToOne(targetEntity=Brand::class)
+     */
+    private $brandname;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $brand;
 
@@ -105,22 +110,36 @@ class Product
         return $this->image;
     }
 
-    public function setImage(string $image): self
+    public function setImage(?string $image): self
     {
         $this->image = $image;
 
         return $this;
     }
 
-    public function getBrand(): ?brand
+    public function getBrandname(): ?Brand
+    {
+        return $this->brandname;
+    }
+
+    public function setBrandname(?Brand $brandname): self
+    {
+        $this->brandname = $brandname;
+
+        return $this;
+    }
+
+    public function getBrand(): ?int
     {
         return $this->brand;
     }
 
-    public function setBrand(?brand $brand): self
+    public function setBrand(?int $brand): self
     {
         $this->brand = $brand;
 
         return $this;
     }
+
+
 }

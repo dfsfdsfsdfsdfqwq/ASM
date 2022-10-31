@@ -66,7 +66,7 @@ class RegistrationFormType extends AbstractType
                     'Female' => 'Female',
                     'Other' => 'Other',
                 ],
-            ])
+                ])
             ->add('phonenumber')
 
         ;

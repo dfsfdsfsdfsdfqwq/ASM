@@ -22,14 +22,14 @@ class UserType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'label' =>'Date of Birth',
-            ])
+                ])
             ->add('gender', ChoiceType::class, [
                 'choices' => [
                     'Male' => 'Male',
                     'Female' => 'Female',
                     'Other' => 'Other',
                 ],
-            ])
+                ])
             ->add('phonenumber')
         ;
     }
