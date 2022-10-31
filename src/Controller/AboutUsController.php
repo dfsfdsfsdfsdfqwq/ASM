@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AboutUsController extends AbstractController
 {
+
     /**
      * @Route("/about", name="about")
      */
