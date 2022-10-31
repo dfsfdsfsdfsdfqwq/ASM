@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ffd6a2c-3cb1-4c62-b168-3e11d03c2a6f" name="Changes" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/ASM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ASM.iml" afterDir="false" />
@@ -53,6 +54,9 @@
       <change beforePath="$PROJECT_DIR$/templates/user/_form.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/_form.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/user/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/edit.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/user/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/index.html.twig" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+>>>>>>> origin/ThanhSon_GCD1002
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +245,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1667241835076</updated>
+<<<<<<< HEAD
       <workItem from="1667241837133" duration="974000" />
+=======
+      <workItem from="1667241837133" duration="1896000" />
+>>>>>>> origin/ThanhSon_GCD1002
     </task>
     <servers />
   </component>
