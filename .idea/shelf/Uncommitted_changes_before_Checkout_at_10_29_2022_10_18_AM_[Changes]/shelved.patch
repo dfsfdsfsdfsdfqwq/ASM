@@ -1,0 +1,95 @@
+Index: config/routes.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>app_register:\r\n  path: /register\r\n  controller: App\\Controller\\RegistrationController::register\r\n  methods: ['GET', 'HEAD']\r\napp_login:\r\n  path: /login\r\n  controller: App\\Controller\\SecurityController::login\r\n  methods: ['GET', 'HEAD']
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config/routes.yaml b/config/routes.yaml
+--- a/config/routes.yaml	(revision 70bfcb1a8da913dbea891c60a32ea8cc86dce9b2)
++++ b/config/routes.yaml	(date 1666982567168)
+@@ -1,8 +1,3 @@
+-app_register:
+-  path: /register
+-  controller: App\Controller\RegistrationController::register
+-  methods: ['GET', 'HEAD']
+-app_login:
+-  path: /login
+-  controller: App\Controller\SecurityController::login
+-  methods: ['GET', 'HEAD']
+\ No newline at end of file
++#index:
++#    path: /
++#    controller: App\Controller\DefaultController::index
+Index: templates/base.html.twig
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html>\r\n    <head>\r\n        <meta charset=\"UTF-8\">\r\n        <title>{% block title %}Welcome!{% endblock %}</title>\r\n        <link rel=\"icon\" href=\"data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>\">\r\n        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}\r\n\r\n            {% block stylesheets %}\r\n\r\n                <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css\" rel=\"stylesheet\"\r\n                      integrity=\"sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor\"\r\n                      crossorigin=\"anonymous\">\r\n\r\n                {{ encore_entry_link_tags('app') }}\r\n            {% endblock %}\r\n\r\n\r\n\r\n        {% block javascripts %}\r\n            <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js\"\r\n                    integrity=\"sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2\"\r\n                    crossorigin=\"anonymous\"></script>\r\n            <script src=\"https://kit.fontawesome.com/a076d05399.js\" crossorigin=\"anonymous\"></script>\r\n            {{ encore_entry_script_tags('app') }}\r\n        {% endblock %}\r\n\r\n    </head>\r\n    <body>\r\n    {{ include('_nav.html.twig') }}\r\n    {% block body %}{% endblock %}\r\n    {{ include('_footer.html.twig') }}\r\n    </body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+--- a/templates/base.html.twig	(revision 70bfcb1a8da913dbea891c60a32ea8cc86dce9b2)
++++ b/templates/base.html.twig	(date 1666982866617)
+@@ -1,34 +1,35 @@
+ <!DOCTYPE html>
+ <html>
+-    <head>
+-        <meta charset="UTF-8">
+-        <title>{% block title %}Welcome!{% endblock %}</title>
+-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+-
+-            {% block stylesheets %}
++<head>
++    <meta charset="UTF-8">
++    <title>{% block title %}Welcome!{% endblock %}</title>
++    <link rel="icon"
++          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
++    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
++    {% block stylesheets %}
+ 
+-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+-                      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+-                      crossorigin="anonymous">
++        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
++              integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
++              crossorigin="anonymous">
+ 
+-                {{ encore_entry_link_tags('app') }}
+-            {% endblock %}
++        {{ encore_entry_link_tags('app') }}
++    {% endblock %}
+ 
+ 
+-
+-        {% block javascripts %}
+-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+-                    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+-                    crossorigin="anonymous"></script>
+-            <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+-            {{ encore_entry_script_tags('app') }}
+-        {% endblock %}
++    {% block javascripts %}
++        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
++                integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
++                crossorigin="anonymous"></script>
++        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
++        {{ encore_entry_script_tags('app') }}
++    {% endblock %}
+ 
+-    </head>
+-    <body>
+-    {{ include('_nav.html.twig') }}
+-    {% block body %}{% endblock %}
+-    {{ include('_footer.html.twig') }}
+-    </body>
++</head>
++<body>
++{{ include('_nav.html.twig') }}
++{% block body %}{% endblock %}
++{{ include('_footer.html.twig') }}
++</body>
++
++</body>
+ </html>

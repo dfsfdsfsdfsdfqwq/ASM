@@ -1,0 +1,182 @@
+Index: config/routes.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#index:\r\n#    path: /\r\n#    controller: App\\Controller\\DefaultController::index\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config/routes.yaml b/config/routes.yaml
+--- a/config/routes.yaml	(revision bac8ac8b69eca517744574a466cd64518483e092)
++++ b/config/routes.yaml	(date 1666972541775)
+@@ -1,3 +1,8 @@
+-#index:
+-#    path: /
+-#    controller: App\Controller\DefaultController::index
++app_register:
++  path: /register
++  controller: App\Controller\RegistrationController::register
++  methods: ['GET', 'HEAD']
++app_login:
++  path: /login
++  controller: App\Controller\SecurityController::login
++  methods: ['GET', 'HEAD']
+\ No newline at end of file
+Index: src/Controller/SecurityController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\n\r\nnamespace App\\Controller;\r\n\r\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\r\nuse Symfony\\Component\\HttpFoundation\\Response;\r\nuse Symfony\\Component\\Routing\\Annotation\\Route;\r\nuse Symfony\\Component\\Security\\Http\\Authentication\\AuthenticationUtils;\r\n\r\nclass SecurityController extends AbstractController\r\n{\r\n    #[Route(path: '/', name: 'app_login')]\r\n    public function login(AuthenticationUtils $authenticationUtils): Response\r\n    {\r\n        // if ($this->getUser()) {\r\n        //     return $this->redirectToRoute('target_path');\r\n        // }\r\n\r\n        // get the login error if there is one\r\n        $error = $authenticationUtils->getLastAuthenticationError();\r\n        // last username entered by the user\r\n        $lastUsername = $authenticationUtils->getLastUsername();\r\n\r\n        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);\r\n    }\r\n\r\n    #[Route(path: '/logout', name: 'app_logout')]\r\n    public function logout(): void\r\n    {\r\n        throw new \\LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Controller/SecurityController.php b/src/Controller/SecurityController.php
+--- a/src/Controller/SecurityController.php	(revision bac8ac8b69eca517744574a466cd64518483e092)
++++ b/src/Controller/SecurityController.php	(date 1666943515208)
+@@ -9,7 +9,7 @@
+ 
+ class SecurityController extends AbstractController
+ {
+-    #[Route(path: '/', name: 'app_login')]
++    #[Route(path: '/login', name: 'app_login')]
+     public function login(AuthenticationUtils $authenticationUtils): Response
+     {
+         // if ($this->getUser()) {
+Index: src/Controller/ProductController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\n\r\nnamespace App\\Controller;\r\n\r\nuse App\\Entity\\Order;\r\nuse App\\Entity\\OrderDetail;\r\nuse App\\Entity\\Product;\r\nuse App\\Form\\ProductType;\r\nuse App\\Repository\\BrandRepository;\r\nuse App\\Repository\\ProductRepository;\r\nuse Doctrine\\Common\\Collections\\Criteria;\r\nuse Doctrine\\Persistence\\ManagerRegistry;\r\nuse Exception;\r\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\r\nuse Symfony\\Component\\HttpFoundation\\Request;\r\nuse Symfony\\Component\\HttpFoundation\\Response;\r\nuse Symfony\\Component\\Routing\\Annotation\\Route;\r\nuse App\\Entity\\Brand;\r\n\r\n\r\n/**\r\n * @Route(\"/product\")\r\n */\r\nclass ProductController extends AbstractController\r\n{\r\n\r\n    /**\r\n     * @Route(\"/{pageId}\", name=\"app_product_index\", methods={\"GET\"})\r\n     * @param ProductRepository $productRepository\r\n     * @param Request $request\r\n     * @param $orderBy\r\n     * @param int $pageId\r\n     * @return Response\r\n     */\r\n    public function index(ProductRepository $productRepository, BrandRepository $brandRepository, Request $request, int $pageId = 1): Response\r\n    {\r\n        $brand = $request->query->get('brand');\r\n        $minPrice = $request->query->get('minPrice');\r\n        $maxPrice = $request->query->get('maxPrice');\r\n        $Name = $request->query->get('name');\r\n        $sortBy = $request->query->get('sort');\r\n        $orderBy = $request->query->get('order');\r\n\r\n        $expressionBuilder = Criteria::expr();\r\n        $criteria = new Criteria();\r\n        if (!is_null($minPrice) || empty($minPrice)) {\r\n            $minPrice = 0;\r\n        }\r\n        $criteria->where($expressionBuilder->gte('price', $minPrice));\r\n        if (!is_null($maxPrice) && !empty(($maxPrice))) {\r\n            $criteria->andWhere($expressionBuilder->lte('price', $maxPrice));\r\n        }\r\n        if (!is_null($Name) && !empty(($Name))) {\r\n            $criteria->andWhere($expressionBuilder->contains('name', $Name));\r\n            $criteria->orWhere($expressionBuilder->contains('description', $Name));\r\n\r\n        }\r\n        if (($brand!='None') && (!is_null($Name)) ) {\r\n            $criteria->andWhere($expressionBuilder->eq('brand', $brand));\r\n        }\r\n        if(!empty($sortBy)){\r\n            $criteria->orderBy([$sortBy => ($orderBy == 'asc') ? Criteria::ASC : Criteria::DESC]);\r\n        }\r\n\r\n        $filteredList = $productRepository->matching($criteria);\r\n\r\n        $numOfItems = $filteredList->count();   // total number of items satisfied above query\r\n        $itemsPerPage = 8; // number of items shown each page\r\n        $filteredList = $filteredList->slice($itemsPerPage * ($pageId - 1), $itemsPerPage);\r\n        return $this->renderForm('product/index.html.twig', [\r\n            'products' => $filteredList,\r\n            'brands' => $brandRepository->findAll(),\r\n            'numOfPages' => ceil($numOfItems / $itemsPerPage)\r\n\r\n        ]);\r\n\r\n    }\r\n\r\n    /**\r\n     * @Route(\"/new\", name=\"app_product_new\", methods={\"GET\", \"POST\"})\r\n     */\r\n    public function new(Request $request, ProductRepository $productRepository): Response\r\n    {\r\n        $product = new Product();\r\n        $form = $this->createForm(ProductType::class, $product);\r\n        $form->handleRequest($request);\r\n\r\n        if ($form->isSubmitted() && $form->isValid()) {\r\n            $productRepository->add($product, true);\r\n\r\n            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);\r\n        }\r\n\r\n        return $this->renderForm('product/new.html.twig', [\r\n            'product' => $product,\r\n            'form' => $form,\r\n        ]);\r\n    }\r\n\r\n    /**\r\n     * @Route(\"/{id}\", name=\"app_product_show\", methods={\"GET\"})\r\n     */\r\n    public function show(Product $product): Response\r\n    {\r\n        return $this->render('product/show.html.twig', [\r\n            'product' => $product,\r\n        ]);\r\n    }\r\n\r\n    /**\r\n     * @Route(\"/{id}/edit\", name=\"app_product_edit\", methods={\"GET\", \"POST\"})\r\n     */\r\n    public function edit(Request $request, Product $product, ProductRepository $productRepository): Response\r\n    {\r\n        $form = $this->createForm(ProductType::class, $product);\r\n        $form->handleRequest($request);\r\n\r\n        if ($form->isSubmitted() && $form->isValid()) {\r\n            $productRepository->add($product, true);\r\n\r\n            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);\r\n        }\r\n\r\n        return $this->renderForm('product/edit.html.twig', [\r\n            'product' => $product,\r\n            'form' => $form,\r\n        ]);\r\n    }\r\n\r\n    /**\r\n     * @Route(\"/{id}\", name=\"app_product_delete\", methods={\"POST\"})\r\n     */\r\n    public function delete(Request $request, Product $product, ProductRepository $productRepository): Response\r\n    {\r\n        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {\r\n            $productRepository->remove($product, true);\r\n        }\r\n\r\n        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Controller/ProductController.php b/src/Controller/ProductController.php
+--- a/src/Controller/ProductController.php	(revision bac8ac8b69eca517744574a466cd64518483e092)
++++ b/src/Controller/ProductController.php	(date 1666973248574)
+@@ -138,4 +138,6 @@
+ 
+         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+     }
++
++
+ }
+Index: templates/_nav.html.twig
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><div class=\"container-{breakpoint}  \" style=\"background: linear-gradient(-180deg,#cd1818,#cd1818);\">\r\n    <header class=\"d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom\">\r\n        <a href=\"{{ path('app_product_index') }}\"\r\n           class=\"d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none\">\r\n            <img class=\"card-img-top\" src=\"{{ asset('images/logo fpt shop.png') }}\" alt=\"Symfony!\"\r\n                 style=\"width: 100%;\"/>\r\n        </a>\r\n\r\n        <div>\r\n            <ul class=\"nav nav-pills nav-fill\">\r\n\r\n                {% if app.request.get('_route') == 'home' %}\r\n                <li class=\"nav-item\"><a href=\"{{ path('home') }}\" class=\"nav-link active\"\r\n                                        style=\"color: white;\"><i class=\"fa fa-home\"></i> Home</a></li>\r\n                {% else %}\r\n                <li class=\"nav-item\"><a href=\"{{ path('home') }}\" class=\"nav-link\" style=\"color: white;\"><i\r\n                                class=\"fa fa-home\"></i> Home</a>\r\n                </li>\r\n                {% endif %}\r\n                {% if app.request.get('_route') == 'app_product_index' %}\r\n                    <li class=\"nav-item\"><a style=\"color: white;\" href=\"{{ path('app_product_index') }}\"\r\n                                            class=\"nav-link active\"><i class=\"fa fa-laptop\"></i> Products</a></li>\r\n                {% else %}\r\n                    <li class=\"nav-item\"><a style=\"color: white;\" href=\"{{ path('app_product_index') }}\"\r\n                                            class=\"nav-link\"><i class=\"fa fa-laptop\"></i> Products</a></li>\r\n\r\n                {% endif %}\r\n                {% if app.user %}\r\n                    <li class=\"nav-item\">\r\n                        {% if app.request.get('_route') == 'app_user_show' %}\r\n                            <a class=\"nav-link active\" href=\" {{ path('app_user_show', {'id':  app.user.id  }) }}\"\r\n                               style=\"color: white;\"><i class=\"fa fa-user\"></i> Wellcome {{ app.user.lastname }}</a>\r\n                        {% else %}\r\n                            <a class=\"nav-link\" href=\" {{ path('app_user_show', {'id':  app.user.id  }) }}\"\r\n                               style=\"color: white;\"> <i class=\"fa fa-user\"></i> Wellcome {{ app.user.lastname }}</a>\r\n                        {% endif %}\r\n                    </li>\r\n                {% endif %}\r\n\r\n                <li class=\"nav-item\">\r\n                    {% if app.request.get('_route') == 'app_login' %}\r\n                        <a href=\"/{{ app.user ? 'logout' : '' }}\" class=\"nav-link active\" style=\"color: white;\">\r\n                            {{ app.user ? 'Logout' : 'Login' }}\r\n                        </a>\r\n                    {% else %}\r\n\r\n                        <a href=\"/{{ app.user ? 'logout' : '' }}\" class=\"nav-link \" style=\"color: white;\">\r\n                            {{ app.user ? 'Logout' : 'Login' }}\r\n                        </a>\r\n                    {% endif %}\r\n                </li>\r\n{#                {% if app.user is null %}#}\r\n{#                    {% if app.request.get('_route') == 'app_register' %}#}\r\n{#                        <li class=\"nav-item\"><a href=\"{{ path('app_register') }}\" class=\"nav-link active\"#}\r\n{#                                                style=\"color: white;\">Signup</a></li>#}\r\n{#                    {% else %}#}\r\n{#                        <li class=\"nav-item\"><a href=\"{{ path('app_register') }}\" class=\"nav-link\"#}\r\n{#                                                style=\"color: white;\">Signup</a></li>#}\r\n{#                    {% endif %}#}\r\n{#                {% endif %}#}\r\n            </ul>\r\n            <br>\r\n            {% if is_granted('ROLE_ADMIN') %}\r\n\r\n                <ul class=\"nav nav-pills\">\r\n                    <li class=\"nav-item\"><p class=\"nav-link\" style=\"color: black;background-color: white\"><i\r\n                                    class=\"fas fa-user-tie\"></i> Manage </p>\r\n                    </li>\r\n                    <li class=\"nav-item\">\r\n                        {% if app.request.get('_route') == 'app_user_index' %}\r\n                    <li class=\"nav-item\"><a href=\"{{ path('app_user_index') }}\" class=\"nav-link active\"\r\n                                            style=\"color: white;\"><i class=\"fa fa-user\"></i> User</a></li>\r\n                    {% else %}\r\n                        <li class=\"nav-item\"><a href=\"{{ path('app_user_index') }}\" class=\"nav-link\"\r\n                                                style=\"color: white;\"><i class=\"fa fa-user\"></i> User</a></li>\r\n                    {% endif %}\r\n                    </li>\r\n\r\n                    <li class=\"nav-item\">\r\n                        {% if app.request.get('_route') == 'app_brand_index' %}\r\n                    <li class=\"nav-item\"><a href=\"{{ path('app_brand_index') }}\" class=\"nav-link active\"\r\n                                            style=\"color: white;\"><i class=\"\tfar fa-edit\"></i> Brand</a></li>\r\n                {% else %}\r\n                    <li class=\"nav-item\"><a href=\"{{ path('app_brand_index') }}\" class=\"nav-link\" style=\"color: white;\"><i\r\n                                    class=\"\tfar fa-edit\"></i> Brand</a>\r\n                    </li>\r\n                    {% endif %}\r\n                    </li>\r\n                    <li class=\"nav-item\">\r\n                        {% if app.request.get('_route') == 'app_product_manage' %}\r\n                    <li class=\"nav-item\"><a href=\"{{ path('app_product_manage') }}\" class=\"nav-link active\"\r\n                                            style=\"color: white;\"><i class=\"fa fa-laptop\"></i> Product</a></li>\r\n                    {% else %}\r\n                    <li class=\"nav-item\"><a href=\"{{ path('app_product_manage') }}\" class=\"nav-link\"\r\n                                            style=\"color: white;\"><i class=\"fa fa-laptop\"></i> Product</a></li>\r\n                    {% endif %}\r\n                </ul>\r\n            {% endif %}\r\n        </div>\r\n    </header>\r\n\r\n\r\n</div>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/_nav.html.twig b/templates/_nav.html.twig
+--- a/templates/_nav.html.twig	(revision bac8ac8b69eca517744574a466cd64518483e092)
++++ b/templates/_nav.html.twig	(date 1666973242397)
+@@ -39,25 +39,25 @@
+ 
+                 <li class="nav-item">
+                     {% if app.request.get('_route') == 'app_login' %}
+-                        <a href="/{{ app.user ? 'logout' : '' }}" class="nav-link active" style="color: white;">
++                        <a href="/{{ app.user ? 'logout' : 'login' }}" class="nav-link active" style="color: white;">
+                             {{ app.user ? 'Logout' : 'Login' }}
+                         </a>
+                     {% else %}
+ 
+-                        <a href="/{{ app.user ? 'logout' : '' }}" class="nav-link " style="color: white;">
++                        <a href="/{{ app.user ? 'logout' : 'login' }}" class="nav-link " style="color: white;">
+                             {{ app.user ? 'Logout' : 'Login' }}
+                         </a>
+                     {% endif %}
+                 </li>
+-{#                {% if app.user is null %}#}
+-{#                    {% if app.request.get('_route') == 'app_register' %}#}
+-{#                        <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link active"#}
+-{#                                                style="color: white;">Signup</a></li>#}
+-{#                    {% else %}#}
+-{#                        <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link"#}
+-{#                                                style="color: white;">Signup</a></li>#}
+-{#                    {% endif %}#}
+-{#                {% endif %}#}
++                {% if app.user is null %}
++                    {% if app.request.get('_route') == 'app_register' %}
++                        <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link active"
++                                                style="color: white;">Signup</a></li>
++                    {% else %}
++                        <li class="nav-item"><a href="{{ path('app_register') }}" class="nav-link"
++                                                style="color: white;">Signup</a></li>
++                    {% endif %}
++                {% endif %}
+             </ul>
+             <br>
+             {% if is_granted('ROLE_ADMIN') %}
+@@ -86,14 +86,7 @@
+                     </li>
+                     {% endif %}
+                     </li>
+-                    <li class="nav-item">
+-                        {% if app.request.get('_route') == 'app_product_manage' %}
+-                    <li class="nav-item"><a href="{{ path('app_product_manage') }}" class="nav-link active"
+-                                            style="color: white;"><i class="fa fa-laptop"></i> Product</a></li>
+-                    {% else %}
+-                    <li class="nav-item"><a href="{{ path('app_product_manage') }}" class="nav-link"
+-                                            style="color: white;"><i class="fa fa-laptop"></i> Product</a></li>
+-                    {% endif %}
++
+                 </ul>
+             {% endif %}
+         </div>
+Index: templates/product/manage.html.twig
+===================================================================
+diff --git a/templates/product/manage.html.twig b/templates/product/manage.html.twig
+deleted file mode 100644
+--- a/templates/product/manage.html.twig	(revision bac8ac8b69eca517744574a466cd64518483e092)
++++ /dev/null	(revision bac8ac8b69eca517744574a466cd64518483e092)
+@@ -1,53 +0,0 @@
+-{% extends 'base.html.twig' %}
+-
+-{% block title %}Product Manage{% endblock %}
+-
+-{% block body %}
+-<div class="container-fluid">
+-    <h1>Product Management</h1>
+-
+-    <table class="table">
+-        <thead>
+-        <tr>
+-            <th>Id</th>
+-            <th>Name</th>
+-            <th>Description</th>
+-            <th>Price</th>
+-            <th>Weight</th>
+-            <th>Image</th>
+-            <th>Brand</th>
+-            <th>actions</th>
+-        </tr>
+-        </thead>
+-        <tbody>
+-        {% for product in products %}
+-            <tr>
+-                <td>{{ product.id }}</td>
+-                <td>{{ product.name }}</td>
+-                <td>{{ product.description }}</td>
+-                <td>{{ product.price }}</td>
+-                <td>{{ product.weight }}</td>
+-                <td>{{ product.image }}</td>
+-                <td>{{ product.brandname.name }}</td>
+-                <td>
+-                    <button class="btn btn-primary" >
+-                        <a href="{{ path('app_product_show', {'id': product.id}) }}" style="color: white">Show</a>
+-                    </button>
+-                    <button class="btn btn-primary" >
+-                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" style="color: white">Edit</a>
+-                    </button>
+-
+-                </td>
+-            </tr>
+-        {% else %}
+-            <tr>
+-                <td colspan="4">no records found</td>
+-            </tr>
+-        {% endfor %}
+-        </tbody>
+-    </table>
+-
+-    <a href="{{ path('app_product_new') }}">Create new</a>
+-</div>
+-
+-{% endblock %}
