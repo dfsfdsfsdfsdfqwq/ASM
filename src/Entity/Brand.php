@@ -29,15 +29,6 @@ class Brand
      */
     private $Origin;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="brand")
-     */
-    private $products;
-
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -84,6 +75,7 @@ class Brand
         }
 
         return $this;
+
     }
 
     public function removeProduct(Product $product): self

@@ -5,6 +5,29 @@
     <div class="container">
         <div class="container-md pt-10">
             <div class="row">
+<<<<<<< HEAD
+=======
+                <div class="col-4">
+                    <div class="container">
+                        <form action={{ path('app_product_index') }} method="get">
+                            <input type="string" name="name" class="form-control rounded mb-4"
+                                   placeholder="Enter the name of the phone, computer, accessories... you need to find"
+                                   aria-label="Search"
+                                   aria-describedby="search-addon"/>
+                            Brand:
+                            <select name="brand" class="form-select">
+                                {#                            <option value="Drink" {{ (selectedCat=="Drink") ? 'selected' }}> Drink</option> #}
+                                {#                            <option value="Snack" {{ (selectedCat=="Snack") ? 'selected' }}> Snack</option> #}
+                                {#                            <option value="Electronics" {{ (selectedCat=="Electronics") ? 'selected' }} >Electronics</option> #}
+                                <option value="None"><label>None</label></option>
+
+                                {% for brand in brands %}
+                                    <option value="{{ brand.id }}"><label> {{ brand.name }}</label></option>
+                                                                    <input type="checkbox" name="brand" value="{{ brand.name }}">
+                                                                    <label> {{ brand.name }}</label><br>
+                                {% endfor %}
+                            </select><br>
+>>>>>>> ThanhSon_GCD1002
 
 
                 <div class="container">
