@@ -10,6 +10,14 @@ class AboutUsController extends AbstractController
 {
 
     /**
+     * @Route("/about", name="about")
+     */
+    public function show(): \Symfony\Component\HttpFoundation\Response
+    {
+        return $this->render('aboutus/aboutus.html.twig');
+    }
+
+    /**
      * @Route("/home", name="home")
      */
     public function home(): \Symfony\Component\HttpFoundation\Response
